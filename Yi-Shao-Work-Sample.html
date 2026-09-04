@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yi Shao — AI Business Analyst Work Sample</title>
+  <script>
+    (() => {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      try {
+        const savedTheme = localStorage.getItem('yi-shao-theme');
+        document.documentElement.dataset.theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : systemTheme;
+      } catch {
+        document.documentElement.dataset.theme = systemTheme;
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172334;
+      --muted: #566476;
+      --navy: #12345a;
+      --teal: #087b78;
+      --teal-soft: #e3f3f1;
+      --blue-soft: #eaf1f8;
+      --paper: #fbfaf7;
+      --white: #ffffff;
+      --line: #d8dee5;
+      --gold: #d69a2d;
+      --red: #a54343;
+      --shadow: 0 16px 45px rgba(18, 52, 90, .12);
+      --canvas: #dde3e8;
+      --card-bg: rgba(255, 255, 255, .72);
+      --project-shadow: 0 8px 24px rgba(18, 52, 90, .07);
+      --badge-bg: #12345a;
+      --badge-fg: #ffffff;
+      --step-border: #bdd8d5;
+      --note-bg: #fff7e8;
+      --note-ink: #4f4a40;
+      --profile-ink: #405365;
+      --screenshot-border: #b7c0ca;
+      --footer-ink: #7b8794;
+      --table-head-bg: #12345a;
+      --table-head-fg: #ffffff;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #e7edf5;
+      --muted: #aab6c4;
+      --navy: #edf4fc;
+      --teal: #55c9c2;
+      --teal-soft: #173331;
+      --blue-soft: #1c2b3a;
+      --paper: #111a24;
+      --white: #15212d;
+      --line: #2b3a4a;
+      --gold: #e0aa4a;
+      --red: #d27676;
+      --shadow: 0 16px 45px rgba(0, 0, 0, .34);
+      --canvas: #080e15;
+      --card-bg: rgba(21, 33, 45, .78);
+      --project-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+      --badge-bg: #267f7a;
+      --badge-fg: #f7fbff;
+      --step-border: #315b5b;
+      --note-bg: #302819;
+      --note-ink: #eadbb9;
+      --profile-ink: #bbc9d6;
+      --screenshot-border: #344759;
+      --footer-ink: #8795a5;
+      --table-head-bg: #213c59;
+      --table-head-fg: #f2f7fc;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--canvas); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Aptos, "Segoe UI", Arial, sans-serif;
+      font-size: 9.4pt;
+      line-height: 1.36;
+      transition: color .18s ease, background-color .18s ease;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      position: relative;
+      width: 8.5in;
+      min-height: 11in;
+      margin: 24px auto;
+      padding: .5in .62in .48in;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      break-after: page;
+      transition: color .18s ease, background-color .18s ease;
+    }
+    .page:last-child { break-after: auto; }
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--navy), var(--teal) 68%, var(--gold));
+    }
+    .page-no {
+      position: absolute;
+      right: .62in;
+      bottom: .3in;
+      color: var(--footer-ink);
+      font-size: 8.5pt;
+    }
+    .footer-name {
+      position: absolute;
+      left: .62in;
+      bottom: .3in;
+      color: var(--footer-ink);
+      font-size: 8.5pt;
+      letter-spacing: .02em;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin: .16in 0 .12in;
+      color: var(--navy);
+      font-size: 29pt;
+      line-height: 1.03;
+      letter-spacing: -.035em;
+    }
+    h2 {
+      margin: 0 0 .13in;
+      color: var(--navy);
+      font-size: 20pt;
+      line-height: 1.08;
+      letter-spacing: -.025em;
+    }
+    h3 {
+      margin-bottom: 5px;
+      color: var(--navy);
+      font-size: 10.6pt;
+      line-height: 1.2;
+    }
+    p { margin-bottom: 7px; }
+    ul { margin: 5px 0 9px 18px; padding: 0; }
+    li { margin: 0 0 3px; }
+    .eyebrow {
+      color: var(--teal);
+      font-size: 8.4pt;
+      font-weight: 750;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .dek {
+      max-width: 6.65in;
+      color: var(--muted);
+      font-size: 12.2pt;
+      line-height: 1.4;
+    }
+    .rule { height: 1px; margin: .2in 0; background: var(--line); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .17in; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .12in; }
+    .card {
+      padding: .13in .15in;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--card-bg);
+    }
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 1.72in;
+      padding: .17in;
+      border-top: 4px solid var(--teal);
+      background: var(--white);
+      box-shadow: var(--project-shadow);
+    }
+    .project-card:nth-child(2) { border-top-color: var(--gold); }
+    .project-card .chips { margin-top: auto; padding-top: 5px; }
+    .project-num {
+      display: inline-flex;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 8px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: var(--badge-fg);
+      background: var(--badge-bg);
+      font-weight: 800;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 99px;
+      color: var(--navy);
+      background: var(--blue-soft);
+      font-size: 8.4pt;
+      font-weight: 650;
+    }
+    .fact-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin: .15in 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--line);
+    }
+    .fact { padding: .13in .14in; background: var(--white); }
+    .fact b {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--teal);
+      font-size: 17pt;
+      line-height: 1.05;
+    }
+    .fact span { color: var(--muted); font-size: 8.7pt; }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin: .13in 0 .17in;
+    }
+    .step {
+      position: relative;
+      min-height: .78in;
+      padding: 9px 8px;
+      border: 1px solid var(--step-border);
+      border-radius: 8px;
+      background: var(--teal-soft);
+      text-align: center;
+      font-size: 8.5pt;
+      line-height: 1.28;
+    }
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -13px;
+      top: 27px;
+      z-index: 2;
+      color: var(--teal);
+      font-weight: 800;
+    }
+    .step b { display: block; margin-bottom: 3px; color: var(--navy); }
+    .label {
+      display: inline-block;
+      margin-bottom: 4px;
+      color: var(--teal);
+      font-size: 8.2pt;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .note {
+      padding: .12in .15in;
+      border-left: 4px solid var(--gold);
+      background: var(--note-bg);
+      color: var(--note-ink);
+    }
+    .evidence-note {
+      padding: .12in .15in;
+      border: 1px solid var(--step-border);
+      border-left: 4px solid var(--teal);
+      border-radius: 7px;
+      background: var(--teal-soft);
+      color: var(--navy);
+    }
+    .evidence-note h3 { margin-bottom: 4px; }
+    .evidence-note p:last-child { margin-bottom: 0; }
+    .evidence-profile {
+      margin: 5px 0 8px;
+      padding: 5px 7px;
+      border-radius: 5px;
+      color: var(--profile-ink);
+      background: var(--blue-soft);
+      font-size: 8.1pt;
+      line-height: 1.3;
+    }
+    .evidence-profile b { color: var(--navy); }
+    .basis {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 7.8pt;
+      font-weight: 650;
+      letter-spacing: .01em;
+    }
+    .quote {
+      padding: .13in .16in;
+      border-left: 4px solid var(--teal);
+      background: var(--teal-soft);
+      color: var(--navy);
+      font-size: 11.2pt;
+      font-weight: 650;
+    }
+    .screenshot {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--screenshot-border);
+      border-radius: 8px;
+      background: #111;
+    }
+    .shot-contract { height: 1.8in; object-fit: cover; object-position: top; }
+    .shot-atm { height: 2.9in; object-fit: cover; object-position: top; }
+    .figure { margin: .12in 0 .15in; }
+    .figcap {
+      margin: 5px 2px 0;
+      color: var(--muted);
+      font-size: 8.2pt;
+      line-height: 1.3;
+    }
+    .decision {
+      display: grid;
+      grid-template-columns: 1.1in 1fr;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .decision:last-child { border-bottom: 0; }
+    .decision b { color: var(--navy); }
+    .decision span { color: var(--muted); }
+    .checklist { list-style: none; margin-left: 0; }
+    .checklist li { position: relative; padding-left: 18px; }
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 900;
+    }
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.8pt;
+    }
+    .matrix th, .matrix td {
+      padding: 7px 8px;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+    .matrix th {
+      color: var(--table-head-fg);
+      background: var(--table-head-bg);
+      font-size: 8.2pt;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .matrix td:first-child { width: 1.45in; color: var(--navy); font-weight: 750; }
+    .matrix.evidence th:nth-child(1) { width: 1.27in; }
+    .matrix.evidence th:nth-child(2) { width: 1.35in; }
+    .matrix.evidence td:first-child { width: 1.27in; }
+    .access {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
+      align-items: start;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .access:last-child { border-bottom: 0; }
+    .access a { font-weight: 750; }
+    .access .kind { color: var(--muted); font-size: 8.4pt; }
+    .urltext {
+      display: block;
+      margin-top: 2px;
+      color: var(--profile-ink);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 7.1pt;
+      line-height: 1.22;
+      overflow-wrap: anywhere;
+    }
+    .credential {
+      padding: 2px 7px;
+      border: 1px solid var(--step-border);
+      border-radius: 5px;
+      color: var(--navy);
+      background: var(--teal-soft);
+      font-family: Consolas, monospace;
+      font-size: 8.2pt;
+      white-space: nowrap;
+    }
+    .theme-toggle {
+      position: fixed;
+      z-index: 20;
+      top: 18px;
+      right: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 38px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      color: var(--ink);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      font: 700 9pt/1 Aptos, "Segoe UI", Arial, sans-serif;
+      cursor: pointer;
+    }
+    .theme-toggle:hover { border-color: var(--teal); background: var(--blue-soft); }
+    .theme-toggle:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    .theme-icon-sun { display: none; }
+    :root[data-theme="dark"] .theme-icon-moon { display: none; }
+    :root[data-theme="dark"] .theme-icon-sun { display: block; }
+    .cover-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: .27in;
+      padding-top: .18in;
+      border-top: 1px solid var(--line);
+    }
+    .cover-meta b { color: var(--navy); font-size: 13pt; }
+    .cover-meta span { color: var(--muted); }
+    .mini { color: var(--muted); font-size: 8.6pt; }
+    .tight p, .tight ul { margin-bottom: 6px; }
+    .context-grid .card {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto auto;
+    }
+    .resources-page .card { padding: .18in .21in !important; }
+    .resources-page .access { padding: 9px 0; }
+    .resources-page .access .kind { font-size: 8.8pt; }
+    .resources-page .urltext { margin-top: 3px; font-size: 7.35pt; }
+    .resources-page .note { margin-top: .18in !important; }
+    .no-break { break-inside: avoid; }
+    @page { size: Letter; margin: 0; }
+    @media print {
+      :root, :root[data-theme="dark"] {
+        color-scheme: light;
+        --ink: #172334;
+        --muted: #566476;
+        --navy: #12345a;
+        --teal: #087b78;
+        --teal-soft: #e3f3f1;
+        --blue-soft: #eaf1f8;
+        --paper: #fbfaf7;
+        --white: #ffffff;
+        --line: #d8dee5;
+        --gold: #d69a2d;
+        --red: #a54343;
+        --card-bg: rgba(255, 255, 255, .72);
+        --project-shadow: none;
+        --badge-bg: #12345a;
+        --badge-fg: #ffffff;
+        --step-border: #bdd8d5;
+        --note-bg: #fff7e8;
+        --note-ink: #4f4a40;
+        --profile-ink: #405365;
+        --screenshot-border: #b7c0ca;
+        --footer-ink: #7b8794;
+        --table-head-bg: #12345a;
+        --table-head-fg: #ffffff;
+      }
+      html, body { background: transparent; }
+      .page { margin: 0; box-shadow: none; break-after: page; }
+      .page:last-child { break-after: auto; }
+      a { color: var(--teal); }
+      .theme-toggle { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body, .page { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+    <svg class="theme-icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"></path>
+    </svg>
+    <svg class="theme-icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+    </svg>
+    <span class="theme-toggle-label">Dark</span>
+  </button>
+
+  <section class="page cover-page">
+    <div class="eyebrow">AI Business Analyst · Work sample</div>
+    <h1>Turning ambiguous work<br>into usable systems</h1>
+    <p class="dek">Two examples of how I moved from an unclear operating need to a working system—one for grounded access to institutional knowledge, and one for scalable prospecting—with decisions, tradeoffs, and validation made visible.</p>
+
+    <div class="grid-2" style="margin-top:.32in">
+      <article class="project-card card">
+        <span class="project-num">1</span>
+        <h3>Turn institutional knowledge into grounded decision support</h3>
+        <p>A RAG knowledge system supporting two workflows: an internal customer-support assistant and a contract Q&amp;A assistant, both grounded in source material.</p>
+        <div class="chips">
+          <span class="chip">RAG</span>
+          <span class="chip">Vector embeddings</span>
+          <span class="chip">FAISS + BM25 retrieval</span>
+          <span class="chip">Clause-level citations</span>
+        </div>
+      </article>
+      <article class="project-card card">
+        <span class="project-num">2</span>
+        <h3>From dozens of manual lookups to thousands of mapped candidates</h3>
+        <p>An automated prospecting process that expanded search coverage while keeping qualification, duplicates, pipeline state, and API spend visible.</p>
+        <div class="chips">
+          <span class="chip">Google Places API</span>
+          <span class="chip">Adaptive geospatial search</span>
+          <span class="chip">Conservative deduplication</span>
+          <span class="chip">API budget controls</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="rule"></div>
+    <div class="grid-3">
+      <div class="card">
+        <span class="label">Start with the decision</span>
+        <p>I turn a broad request into the decision people need to make and the evidence required to support it.</p>
+      </div>
+      <div class="card">
+        <span class="label">Design the workflow</span>
+        <p>I translate business rules, data constraints, and operating handoffs into usable system behavior.</p>
+      </div>
+      <div class="card">
+        <span class="label">Validate what matters</span>
+        <p>I test the implementation, state what the evidence supports, and identify the next business measure.</p>
+      </div>
+    </div>
+
+    <div class="quote" style="margin-top:.22in">The through-line is practical judgment: preserve source truth, make uncertainty visible, and measure the decision that matters—not just system activity.</div>
+
+    <div class="cover-meta">
+      <div><b>Yi Shao</b><br><span>Prepared for Jazwares</span></div>
+      <div style="text-align:right"><span>September 2026</span><br><span>Six-page work sample</span></div>
+    </div>
+    <span class="footer-name">Yi Shao · Work Sample</span><span class="page-no">1 / 6</span>
+  </section>
+
+  <section class="page rag-overview-page">
+    <div class="eyebrow">Example 1 · RAG knowledge system</div>
+    <h2>Turn institutional knowledge into grounded decision support</h2>
+    <p class="dek" style="font-size:11.5pt">The same retrieval pattern supported two operating needs: helping agents apply prior resolutions; and helping reviewers locate the contract language behind an answer.</p>
+
+    <div class="grid-2 context-grid">
+      <div class="card tight">
+        <span class="label">A · Customer support</span>
+        <h3>Context</h3>
+        <p>GetCoins support knowledge sat across more than five years of Zendesk email threads and recorded calls. Customer questions were highly repetitive, so past resolutions represented valuable institutional knowledge. Experienced agents knew which jurisdiction-sensitive resolutions applied; newer staff often had to search or escalate while a customer waited.</p>
+        <h3>Target decision</h3>
+        <p>For a live support question: what prior resolution is applicable, and what source should an agent verify before responding?</p>
+      </div>
+      <div class="card tight">
+        <span class="label">B · Contract review</span>
+        <h3>Context</h3>
+        <p>An operating board could show contract status, but not what the agreement actually said. Revenue share, notice contacts, renewal terms, and calculated notice deadlines remained buried in PDFs, scans, DOCX files, and filled forms.</p>
+        <h3>Target decision</h3>
+        <p>For a contract question: what clause answers it, where is the supporting passage, and when must a human verify the original?</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:.17in">My specific contribution</h3>
+    <p>I owned problem framing, workflow design, implementation, test design, and rollout. I translated the operational need into a shared system pattern, then adapted ingestion, privacy controls, and interface to each use case.</p>
+
+    <div class="flow">
+      <div class="step"><b>1 · Acquire</b>Threads, calls, PDFs, DOCX, scans</div>
+      <div class="step"><b>2 · Prepare</b>Transcribe, OCR, clean, enrich metadata</div>
+      <div class="step"><b>3 · Retrieve</b>Dense + keyword search with routing</div>
+      <div class="step"><b>4 · Answer</b>Grounded response with citations</div>
+      <div class="step"><b>5 · Verify</b>Human checks source; test failures feed backlog</div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Support implementation</h3>
+        <ul>
+          <li>Whisper transcribed recorded calls; a Qwen stage distilled the core question, resolution, state, category, and date before indexing.</li>
+          <li>Hybrid retrieval combined semantic similarity with exact-term matching for error codes, amounts, product terms, and jurisdictions.</li>
+          <li>A live ingestion pipeline automatically adds each new support ticket and call recording to the knowledge base.</li>
+          <li>The corpus, index, and inference remained on a company local server. I delivered answers through Telegram, the company’s standard communication channel, so agents could use the system without switching tools.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Contract implementation</h3>
+        <ul>
+          <li>A local-first FastAPI application ingested PDF, DOCX, and TXT; OCR handled scans and filled-form overlays.</li>
+          <li>Clause-aware chunks, metadata filters, and click-through citations kept each answer tied to the original source.</li>
+          <li>FAISS vector search and SQLite FTS5 keyword search were fused so both semantic matches and exact contract terms could surface.</li>
+          <li>In optional cloud mode, bank and routing numbers are masked before embedding or metadata extraction.</li>
+          <li>The linked technical demo uses reconstructed agreements with mock parties, terms, and values.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note"><b>Key constraint:</b> answers had to be useful under time pressure without presenting generated text as authority. The acceptance rule was therefore “traceable enough to verify,” not “confidently phrased.”</div>
+    <span class="footer-name">Yi Shao · Work Sample</span><span class="page-no">2 / 6</span>
+  </section>
+
+  <section class="page rag-results-page">
+    <div class="eyebrow">Example 1 · Decisions, adoption, and evaluation</div>
+    <h2>Source truth was a product requirement</h2>
+
+    <div class="grid-2">
+      <div>
+        <h3>Decisions I owned</h3>
+        <div class="decision"><b>Enrich first</b><span>Noisy conversations were distilled before embedding so retrieval targeted the actual problem and resolution.</span></div>
+        <div class="decision"><b>Use hybrid retrieval</b><span>Semantic search handled paraphrases; keyword search protected exact business terms and identifiers.</span></div>
+        <div class="decision"><b>Cite the passage</b><span>The interface exposes the supporting document and text, enabling verification and correction.</span></div>
+        <div class="decision"><b>Integrate with the selected workflow</b><span>The business owner selected Telegram as the company’s standard communication channel; I integrated with it to reduce adoption friction.</span></div>
+      </div>
+      <div>
+        <h3>Stakeholders and enablement</h3>
+        <p>I treated experienced support staff as owners of the tacit rule set, not merely end users. Their recurring questions informed the initial corpus, categories, and test set. Delivering answers in their existing channel reduced adoption friction and helped newer/night-shift staff use prior resolutions without waiting for a specific expert.</p>
+        <div class="quote">Previously, agents could spend several minutes searching or escalating while a customer waited. Now, the assistant returns a source-grounded answer in about 30 seconds. Faster, more reliable access gave managers greater scheduling flexibility and more confidence assigning less-experienced representatives to night shifts.</div>
+      </div>
+    </div>
+
+    <div class="fact-strip">
+      <div class="fact"><b>n = 5</b><span>small held-back support regression; all five passed after 10 tuning questions</span><span class="basis">Internal pilot check</span></div>
+      <div class="fact"><b>22 / 22</b><span>synthetic questions retrieved the expected contract</span><span class="basis">Current-implementation test</span></div>
+      <div class="fact"><b>20 / 22</b><span>expected phrase hit; citation checks were 8 / 8</span><span class="basis">Synthetic portfolio evaluation</span></div>
+    </div>
+
+    <table class="matrix" style="margin:.13in 0 .15in;font-size:8.2pt">
+      <thead><tr><th>Public check</th><th>Result</th><th>What it shows</th></tr></thead>
+      <tbody>
+        <tr><td>Expected document</td><td>22 / 22</td><td>Confirmed that the labeled contract appeared in retrieved chunks.</td></tr>
+        <tr><td>Expected phrase</td><td>20 / 22</td><td>Tested whether retrieval reached the expected supporting passage.</td></tr>
+        <tr><td>Citation annotation</td><td>8 / 8</td><td>Confirmed that displayed citation labels resolved to the intended chunks.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="grid-2">
+      <div class="card tight">
+        <h3>What the results support</h3>
+        <ul class="checklist">
+          <li>The support workflow showed directional improvement in lookup time and night-shift access.</li>
+          <li>Past resolutions became shared, searchable institutional knowledge instead of remaining dependent on individual agents’ memory.</li>
+          <li>Source-linked answers were delivered through the company’s established messaging platform, allowing agents to retrieve and verify information within their existing workflow.</li>
+          <li>A live ingestion pipeline kept the knowledge base current by automatically adding each new ticket and call recording.</li>
+        </ul>
+      </div>
+      <div class="card tight">
+        <h3>What I would improve</h3>
+        <ul>
+          <li>Expand to 150–200 locked questions across answerability, abstention, and high-risk clauses.</li>
+          <li>Collect agent feedback at the answer level and review misses by category.</li>
+          <li>Document and test content-minimization, access, retention, and incident controls for the company-standard Telegram workflow.</li>
+          <li>Separate retrieval, citation, answer-correctness, and business-outcome dashboards.</li>
+        </ul>
+      </div>
+    </div>
+    <span class="footer-name">Yi Shao · Work Sample</span><span class="page-no">3 / 6</span>
+  </section>
+
+  <section class="page atm-overview-page">
+    <div class="eyebrow">Example 2 · Prospecting operations</div>
+    <h2>From dozens of manual lookups to thousands of mapped candidates</h2>
+    <p class="dek" style="font-size:11.5pt">The immediate problem was time. The deeper problem was knowing what had been fully covered, what may have been missed, what was duplicated, and what had already been reviewed.</p>
+
+    <div class="grid-2">
+      <div class="card tight">
+        <span class="label">Context</span>
+        <p>Business development built prospect lists by manual lookups, one location at a time. The team could not easily tell which areas had been fully covered, which viable businesses may have been missed, which records were duplicates, or which prospects had already been reviewed.</p>
+      </div>
+      <div class="card tight">
+        <span class="label">My contribution</span>
+        <p>I turned manual map searches into an automated prospecting process capable of surfacing and organizing thousands of mapped candidates in a few clicks. I built in adaptive search, qualification states, deduplication, pipeline history, revisit logic, export, and spending safeguards.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:.16in">Previous and current workflow</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="label">Before</span>
+        <p>Search map → open listing → visually inspect → copy fields to Excel → reconcile duplicates → hand off list.</p>
+        <p class="mini"><b>Gaps:</b> unclear coverage; repeated searches; missed candidates; duplicates; inconsistent qualification and funnel state.</p>
+      </div>
+      <div class="card">
+        <span class="label">After</span>
+        <p>Choose market/mode → preview cost → search adaptively → deduplicate → compare fleet/pipeline → qualify → decide/revisit → export.</p>
+        <p class="mini"><b>Controls:</b> budget caps, caching, decision history, monotonic funnel states, and explicit unknown qualification states.</p>
+      </div>
+    </div>
+
+    <figure class="figure" style="margin-top:.17in">
+      <img class="screenshot shot-atm" src="assets/atm-map-live.png" alt="Live ATM prospecting map with location markers, pipeline overlay, search controls, and decision panel">
+    </figure>
+
+    <div class="grid-3">
+      <div class="card"><span class="label">Search</span><p>Near-me, market-wide, and corridor modes support different prospecting motions.</p></div>
+      <div class="card"><span class="label">Decision</span><p>Each candidate is marked Yes, Likely, or Unknown. Missing information stays flagged for review instead of automatically disqualifying the prospect.</p></div>
+      <div class="card"><span class="label">Control</span><p>Every candidate can carry qualification, reason, revisit date, and an auditable decision trail.</p></div>
+    </div>
+    <span class="footer-name">Yi Shao · Work Sample</span><span class="page-no">4 / 6</span>
+  </section>
+
+  <section class="page atm-results-page">
+    <div class="eyebrow">Example 2 · Data readiness and business judgment</div>
+    <h2>The tool surfaced a better strategy</h2>
+
+    <div class="grid-2">
+      <div>
+        <h3>Decisions I owned</h3>
+        <div class="decision"><b>One operating view</b><span>Existing locations, active pipeline prospects, and newly discovered candidates appeared on the same map, revealing coverage gaps and potential duplicate outreach before the next search.</span></div>
+        <div class="decision"><b>Unknown ≠ no</b><span>Business-listing metadata is often incomplete. A missing shop or ATM tag does not prove the feature is absent, so the qualification model keeps the candidate as Unknown for review instead of excluding it.</span></div>
+        <div class="decision"><b>Adaptive search</b><span>The system automatically divides dense search areas into smaller zones while leaving sparse areas intact. Cached results and fixed call budgets expand coverage without repeating unnecessary paid API requests.</span></div>
+        <div class="decision"><b>Protect pipeline integrity</b><span>Workflow safeguards prevent duplicates, preserve review history, and keep prospect status consistent across searches and imports.</span></div>
+        <div class="decision"><b>Make cost structural</b><span>Daily cap, hard cap, burst guard, cache, kill switch, and opt-in search were requirements—not afterthoughts.</span></div>
+      </div>
+      <div>
+        <h3>Stakeholder influence</h3>
+        <p>The users were the owner and business-development team. The owner was initially skeptical, so I waited to present until reliability and failure controls were visible. Making API cost and market coverage visible changed the discussion from whether to automate list building to how to scale outreach.</p>
+        <div class="quote">Influence did not mean winning the original argument. The system made cost and volume legible enough for the owner to choose a different, more scalable operating model.</div>
+
+        <h3 style="margin-top:.16in">Outcome</h3>
+        <ul class="checklist">
+          <li>The professional workflow entered use in January 2026.</li>
+          <li>The team moved from researching locations one at a time to surfacing and organizing thousands of mapped candidates in a few clicks.</li>
+          <li>Existing locations, active prospects, and new candidates became visible in one shared operating view.</li>
+          <li>The owner shifted emphasis toward outbound mail and self-selected inbound onboarding.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="fact-strip">
+      <div class="fact"><b>Thousands</b><span>mapped candidates surfaced and organized in a few clicks</span><span class="basis">Operational scale</span></div>
+      <div class="fact"><b>One view</b><span>existing locations, active prospects, and new candidates together</span><span class="basis">Shared pipeline</span></div>
+      <div class="fact"><b>Live APIs</b><span>adaptive search, caching, and hard spending limits</span><span class="basis">Built-in controls</span></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card tight">
+        <h3>Measurement and economics</h3>
+        <p>The workflow tracks market coverage, qualification progress, duplicate prevention, and API usage. The linked cost model compares the labor and provider costs of manual and automated prospecting.</p>
+      </div>
+      <div class="card tight">
+        <h3>What I would improve</h3>
+        <ul>
+          <li>Use campaign-specific QR codes and landing pages to compare response and conversion by market or mailing batch.</li>
+          <li>Show the estimated API usage and cost before a search begins.</li>
+          <li>Add closed-shop detection and scheduled stale-data review.</li>
+        </ul>
+      </div>
+    </div>
+
+    <span class="footer-name">Yi Shao · Work Sample</span><span class="page-no">5 / 6</span>
+  </section>
+
+  <section class="page resources-page">
+    <div class="eyebrow">For a deeper review</div>
+    <h2>Supporting material</h2>
+    <p class="dek" style="font-size:11.5pt">Source code, working demos, requirements, UAT, and the cost model are available below.</p>
+
+    <div class="card" style="padding:.12in .17in">
+      <div class="access">
+        <div><a href="https://yishao-ai.github.io/work-sample-evidence/">Work-sample portfolio</a><span class="urltext">https://yishao-ai.github.io/work-sample-evidence/</span><div class="kind">Browser version, project summaries, source repositories, and supporting material</div></div>
+        <span class="chip">Start here</span>
+      </div>
+      <div class="access">
+        <div><a href="https://yishao-ai.github.io/contract-review-rag/demo/">Contract-review RAG demo</a><span class="urltext">https://yishao-ai.github.io/contract-review-rag/demo/</span><div class="kind">Static HTML walkthrough of the source-grounded retrieval interface</div></div>
+        <span class="chip">Demo</span>
+      </div>
+      <div class="access">
+        <div><a href="https://github.com/YiShao-AI/contract-review-rag">Contract-review source code</a><span class="urltext">https://github.com/YiShao-AI/contract-review-rag</span><div class="kind">Application code, architecture, tests, and reconstructed corpus</div></div>
+        <span class="chip">GitHub</span>
+      </div>
+      <div class="access">
+        <div><a href="https://atm-map.taila60f3a.ts.net/">ATM Map live demo</a><span class="urltext">https://atm-map.taila60f3a.ts.net/</span><div class="kind">Password-protected demo using live APIs; credentials provided with the application</div></div>
+        <span class="chip">Live demo</span>
+      </div>
+      <div class="access">
+        <div><a href="https://github.com/YiShao-AI/ATM-Map-Public">ATM Map source code</a><span class="urltext">https://github.com/YiShao-AI/ATM-Map-Public</span><div class="kind">Search, qualification, pipeline, cost-control, and test implementation</div></div>
+        <span class="chip">GitHub</span>
+      </div>
+      <div class="access">
+        <div><a href="https://yishao-ai.github.io/work-sample-evidence/Yi-Shao-BA-Verification-Appendix.html">Requirements, workflows &amp; UAT</a> · <a href="https://yishao-ai.github.io/work-sample-evidence/Yi-Shao-ATM-Prospecting-Cost-Model.xlsx">ATM cost model</a><div class="kind">Optional supporting detail for business-analysis and spreadsheet review</div></div>
+        <span class="chip">Supporting</span>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:.14in"><b>Confidentiality:</b> Public demos use reconstructed or synthetic data. Employer source code and confidential records are excluded.</div>
+
+    <span class="footer-name">Yi Shao · Work Sample</span><span class="page-no">6 / 6</span>
+  </section>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.getElementById('theme-toggle');
+      const label = toggle.querySelector('.theme-toggle-label');
+      const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
+
+      function savedTheme() {
+        try { return localStorage.getItem('yi-shao-theme'); }
+        catch { return null; }
+      }
+
+      function renderToggle() {
+        const dark = root.dataset.theme === 'dark';
+        toggle.setAttribute('aria-pressed', String(dark));
+        toggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        toggle.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+        label.textContent = dark ? 'Light' : 'Dark';
+      }
+
+      toggle.addEventListener('click', () => {
+        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('yi-shao-theme', next); } catch {}
+        renderToggle();
+      });
+
+      systemPreference.addEventListener?.('change', event => {
+        if (!savedTheme()) {
+          root.dataset.theme = event.matches ? 'dark' : 'light';
+          renderToggle();
+        }
+      });
+
+      renderToggle();
+    })();
+  </script>
+</body>
+</html>

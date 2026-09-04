@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Requirements, workflows, data ownership, acceptance criteria, and UAT for Yi Shao's RAG knowledge system and ATM prospecting workflow.">
+  <title>Yi Shao — Requirements, Workflows &amp; UAT</title>
+  <script>
+    (() => {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      try {
+        const saved = localStorage.getItem('yi-shao-theme');
+        document.documentElement.dataset.theme = saved === 'dark' || saved === 'light' ? saved : systemTheme;
+      } catch { document.documentElement.dataset.theme = systemTheme; }
+    })();
+  </script>
+  <style>
+    :root{color-scheme:light;--ink:#172334;--muted:#596778;--navy:#12345a;--teal:#087b78;--teal-soft:#e3f3f1;--blue-soft:#eaf1f8;--paper:#fbfaf7;--surface:#fff;--line:#d5dde5;--gold:#d69a2d;--shadow:0 16px 42px rgba(18,52,90,.14);--head:#12345a;--head-ink:#fff;--foot:#788592}
+    :root[data-theme="dark"]{color-scheme:dark;--ink:#e7edf5;--muted:#aab6c4;--navy:#edf4fc;--teal:#55c9c2;--teal-soft:#173331;--blue-soft:#1c2b3a;--paper:#111a24;--surface:#15212d;--line:#2b3a4a;--gold:#e0aa4a;--shadow:0 16px 42px rgba(0,0,0,.36);--head:#213c59;--head-ink:#f2f7fc;--foot:#8795a5}
+    *{box-sizing:border-box}html{background:#080e15}body{margin:0;color:var(--ink);font:8.35pt/1.29 Aptos,"Segoe UI",Arial,sans-serif}a{color:var(--teal);text-decoration:none}h1,h2,h3,p{margin-top:0}h1,h2,h3{color:var(--navy)}h1{margin:.12in 0 .09in;font-size:27pt;line-height:1.02;letter-spacing:-.04em}h2{margin:0 0 .12in;font-size:19pt;line-height:1.07;letter-spacing:-.025em}h3{margin:0 0 5px;font-size:10.4pt;line-height:1.16}p{margin-bottom:6px}ul{margin:4px 0 6px 15px;padding:0}li{margin-bottom:2px}
+    .theme-toggle{position:fixed;z-index:5;right:18px;top:18px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink);background:var(--surface);font:700 12px Aptos,"Segoe UI",Arial,sans-serif;cursor:pointer}.page{position:relative;width:8.5in;height:11in;margin:24px auto;padding:.48in .56in .46in;overflow:hidden;background:var(--paper);box-shadow:var(--shadow);break-after:page}.page:last-of-type{break-after:auto}.page:before{content:"";position:absolute;inset:0 0 auto;height:8px;background:linear-gradient(90deg,#12345a,var(--teal) 69%,var(--gold))}
+    .eyebrow{color:var(--teal);font-size:7.8pt;font-weight:850;letter-spacing:.15em;text-transform:uppercase}.dek{max-width:7in;color:var(--muted);font-size:10.7pt;line-height:1.4}.footer{position:absolute;left:.56in;right:.56in;bottom:.24in;display:flex;justify-content:space-between;color:var(--foot);font-size:7.4pt}.section-title{margin:.14in 0 .07in;color:var(--navy);font-size:10.6pt;font-weight:850}.label{color:var(--teal);font-size:7.1pt;font-weight:850;letter-spacing:.07em;text-transform:uppercase}.small{color:var(--muted);font-size:7.35pt}.id{font:6.95pt Consolas,"Courier New",monospace;white-space:nowrap}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.12in}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.1in}.card{padding:.11in .13in;border:1px solid var(--line);border-radius:8px;background:var(--surface)}.card p:last-child,.card ul:last-child{margin-bottom:0}.role{margin:.13in 0;padding:.1in .13in;border-left:4px solid var(--teal);background:var(--teal-soft);font-size:8.8pt}.note{padding:.09in .12in;border-left:4px solid var(--gold);background:var(--teal-soft)}.callout{padding:.1in .13in;border-left:4px solid var(--teal);background:var(--teal-soft);font-size:8.7pt}
+    table{width:100%;border-collapse:collapse;font-size:7.55pt;line-height:1.23}th,td{padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}th{color:var(--head-ink);background:var(--head);font-size:6.85pt;letter-spacing:.04em;text-transform:uppercase}td:first-child{color:var(--navy);font-weight:800}.dense{font-size:7.12pt;line-height:1.19}.dense th,.dense td{padding:4px 5px}.micro{font-size:6.8pt;line-height:1.17}.micro th,.micro td{padding:3.7px 4.5px}.status{display:inline-block;padding:2px 7px;border-radius:999px;color:var(--navy);background:var(--blue-soft);font-size:6.8pt;font-weight:850;white-space:nowrap}.status.good{color:var(--teal);background:var(--teal-soft)}#page-3 .micro{font-size:7.2pt;line-height:1.21}#page-3 .micro th,#page-3 .micro td{padding:4.4px 5px}
+    .before-after{display:grid;grid-template-columns:.62in 1fr .38in 1fr;gap:0;align-items:stretch;margin-bottom:.12in;border:1px solid var(--line);border-radius:8px;overflow:hidden}.before-after>div{padding:.09in .1in;background:var(--surface)}.before-after .cap{display:flex;align-items:center;justify-content:center;color:var(--head-ink);background:var(--head);font-size:6.8pt;font-weight:850;letter-spacing:.05em;text-transform:uppercase}.before-after .arrow{display:flex;align-items:center;justify-content:center;padding:0;color:var(--teal);background:var(--paper);font-size:14pt;font-weight:900}
+    .flow{display:grid;grid-template-columns:.38in .95in 1.85in 1.6in 1fr;border:1px solid var(--line);border-bottom:0}.flow:last-child{border-bottom:1px solid var(--line)}.flow>div{padding:5px;border-right:1px solid var(--line)}.flow>div:last-child{border-right:0}.flow.head>div{color:var(--head-ink);background:var(--head);font-size:6.65pt;font-weight:850;letter-spacing:.035em;text-transform:uppercase}.flow .num{color:var(--teal);font-weight:900}
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:.09in}.check{padding:.09in .11in;border:1px solid var(--line);border-radius:7px;background:var(--surface)}.check:before{content:"✓";float:left;margin-right:6px;color:var(--teal);font-weight:900}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.1in}.metric{padding:.1in .12in;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:8px;background:var(--surface)}.metric strong{display:block;color:var(--teal);font-size:15pt;line-height:1.08}.metric span{display:block;margin-top:4px;color:var(--muted);font-size:7.3pt}
+    @page{size:Letter;margin:0}@media screen and (max-width:850px){.theme-toggle{position:fixed}.page{width:100%;height:auto;min-height:11in;margin:0 0 16px;padding:.42in .34in}.grid2,.grid3,.metric-grid,.checklist{grid-template-columns:1fr}.before-after{grid-template-columns:.7in 1fr}.before-after .arrow{display:none}.flow{overflow-x:auto}}
+    @media print{:root,:root[data-theme="light"]{color-scheme:dark;--ink:#e7edf5;--muted:#aab6c4;--navy:#edf4fc;--teal:#55c9c2;--teal-soft:#173331;--blue-soft:#1c2b3a;--paper:#111a24;--surface:#15212d;--line:#2b3a4a;--gold:#e0aa4a;--shadow:none;--head:#213c59;--head-ink:#f2f7fc;--foot:#8795a5}html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.theme-toggle{display:none}.page{margin:0;box-shadow:none;break-after:page}}
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="theme-toggle" type="button">◐ <span id="theme-label">Theme</span></button>
+
+  <section class="page" id="page-1">
+    <div class="eyebrow">Business analysis work product · two implemented workflows</div>
+    <h1>Requirements, workflows &amp; UAT</h1>
+    <p class="dek">The analysis behind a RAG knowledge system and an automated prospecting workflow: who needed what decision, how the operating process changed, what the system must do, and how release readiness is checked.</p>
+
+    <div class="grid2" style="margin:.14in 0">
+      <div class="card"><span class="label">01 · RAG knowledge system</span><h3 style="margin-top:5px">Turn institutional knowledge into grounded decision support</h3><p>Make repeated support resolutions and contract language searchable, source-linked, and usable inside the decision workflow.</p></div>
+      <div class="card"><span class="label">02 · Prospecting operations</span><h3 style="margin-top:5px">From manual lookups to mapped candidate coverage</h3><p>Replace one-at-a-time research with a governed search, qualification, pipeline, and cost-control process.</p></div>
+    </div>
+
+    <div class="role"><b>My role:</b> stakeholder discovery, problem framing, current/future workflow design, requirements and acceptance criteria, data ownership, implementation, test design, rollout, and measurement planning.</div>
+
+    <h2>Stakeholder decision map</h2>
+    <table class="dense">
+      <thead><tr><th>Stakeholder</th><th>Decision or job</th><th>Operating need</th><th>Design response</th></tr></thead>
+      <tbody>
+        <tr><td>Support agent</td><td>Resolve a live question while the customer is waiting.</td><td>Find the applicable prior resolution without depending on a specific experienced agent.</td><td>Natural-language retrieval in the team’s established messaging channel, with the source passage available for verification.</td></tr>
+        <tr><td>Support manager</td><td>Staff more flexibly and reduce escalation dependency.</td><td>Give newer and night-shift representatives reliable access to institutional knowledge.</td><td>Source-grounded answers, low-friction access, escalation behavior, and lookup/adoption measures.</td></tr>
+        <tr><td>Knowledge owner</td><td>Preserve jurisdiction- and case-specific context.</td><td>Exact codes, dates, amounts, categories, and policy versions matter alongside semantic similarity.</td><td>Hybrid search, enriched metadata, source links, correction ownership, and a failure-review loop.</td></tr>
+        <tr><td>ATM business owner</td><td>Choose a scalable acquisition motion with visible cost.</td><td>Increase market coverage while keeping API use and downstream workload understandable.</td><td>Pre-run estimate, explicit paid action, caps, cache, stop control, and campaign economics.</td></tr>
+        <tr><td>Business-development user</td><td>Find, qualify, and advance prospects without duplicate work.</td><td>See coverage, existing sites, pipeline status, uncertainty, and next action in one place.</td><td>Adaptive search, tri-state qualification, conservative deduplication, history, revisit logic, and export.</td></tr>
+        <tr><td>Data / security owner</td><td>Control approved sources, access, lifecycle, and incident response.</td><td>Keep confidential content within the authorized operating boundary.</td><td>Source inventory, role access, local-first processing, minimized message output, retention ownership, and release checkpoints.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Discovery frame</div>
+    <table class="dense">
+      <thead><tr><th>Question</th><th>RAG knowledge system</th><th>ATM prospecting</th></tr></thead>
+      <tbody>
+        <tr><td>What decision changes?</td><td>Which prior resolution or clause applies, and which source should the user verify?</td><td>Is this candidate worth the next action, and what evidence supports that decision?</td></tr>
+        <tr><td>What is the unit of work?</td><td>A verified answer, correction, or escalation.</td><td>A unique candidate with a current qualification and funnel state.</td></tr>
+        <tr><td>What creates risk?</td><td>Unsupported answers, stale sources, missed exact terms, or content leaving its approved boundary.</td><td>Incomplete coverage, uncontrolled calls, duplicate outreach, false exclusion, or stale pipeline state.</td></tr>
+        <tr><td>How is value read?</td><td>Time to verified resolution, escalation burden, answer support, and adoption.</td><td>Coverage, analyst capacity, qualified output, campaign conversion, and total acquisition cost.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note" style="margin-top:.12in"><b>Confidentiality:</b> Public examples use reconstructed or non-confidential records. Employer source code and confidential records are excluded.</div>
+    <div class="footer"><span>Yi Shao · Requirements, workflows &amp; UAT</span><span>1 / 5</span></div>
+  </section>
+
+  <section class="page" id="page-2">
+    <div class="eyebrow">Process analysis · owners, handoffs, controls, exceptions</div>
+    <h2>From current state to operating workflow</h2>
+
+    <h3>RAG knowledge system</h3>
+    <div class="before-after"><div class="cap">Before</div><div>Search long threads or recordings, guess the right terms, and interrupt an experienced agent when the answer is unclear.</div><div class="arrow">→</div><div>Ask in plain language, receive a source-grounded answer, verify the cited passage, then answer or escalate with context.</div></div>
+    <div class="flow head"><div>Step</div><div>Owner</div><div>Action</div><div>System behavior</div><div>Control / exception</div></div>
+    <div class="flow"><div class="num">01</div><div>Data owner</div><div>Approves source, purpose, access, and lifecycle.</div><div>Records the source, version, and owner.</div><div>Unapproved source stays outside the corpus.</div></div>
+    <div class="flow"><div class="num">02</div><div>Knowledge owner</div><div>Defines authoritative content and conflict rules.</div><div>Transcribes/OCRs, cleans, enriches, chunks, and indexes content.</div><div>Low-quality extraction routes to review.</div></div>
+    <div class="flow"><div class="num">03</div><div>Support agent</div><div>Asks a natural-language question in the established work channel.</div><div>Combines semantic and exact-term search, then builds a cited response.</div><div>Weak or conflicting evidence triggers clarification or escalation.</div></div>
+    <div class="flow"><div class="num">04</div><div>Support agent</div><div>Checks the cited passage and acts on the answer.</div><div>Preserves document, page, section, and source context.</div><div>Missing citation means the answer is not complete.</div></div>
+    <div class="flow"><div class="num">05</div><div>Manager / owner</div><div>Reviews corrections, use patterns, and recurring failures.</div><div>Adds new tickets and calls through the live ingestion pipeline.</div><div>Correction becomes a test case and source-maintenance action.</div></div>
+
+    <h3 style="margin-top:.18in">ATM prospecting workflow</h3>
+    <div class="before-after"><div class="cap">Before</div><div>Search maps one location at a time, copy listings into Excel, and rely on memory to avoid missed areas or duplicate review.</div><div class="arrow">→</div><div>Scope a market, forecast usage, search adaptively, qualify and dedupe candidates, record decisions, and advance a governed pipeline.</div></div>
+    <div class="flow head"><div>Step</div><div>Owner</div><div>Action</div><div>System behavior</div><div>Control / exception</div></div>
+    <div class="flow"><div class="num">01</div><div>Owner / BD</div><div>Sets the market, search shape, categories, and budget.</div><div>Shows expected API usage and cost before a search begins.</div><div>No explicit start means no paid search.</div></div>
+    <div class="flow"><div class="num">02</div><div>BD operator</div><div>Starts and monitors the search.</div><div>Searches restricted geometry, subdivides dense areas, and reuses valid cache.</div><div>Budget, burst, daily, lifetime, and kill controls can stop calls.</div></div>
+    <div class="flow"><div class="num">03</div><div>BD operator</div><div>Reviews candidate evidence and exceptions.</div><div>Normalizes records, overlays sites/pipeline, deduplicates conservatively, and preserves unknown fields.</div><div>Missing evidence routes to verify; it does not become a false “no.”</div></div>
+    <div class="flow"><div class="num">04</div><div>BD owner</div><div>Records qualification, reason, stage, owner, and next action.</div><div>Persists history, revisit dates, and campaign membership.</div><div>Bulk updates cannot erase a later stage or human decision.</div></div>
+    <div class="flow"><div class="num">05</div><div>Owner / analyst</div><div>Exports current records and reviews market/campaign performance.</div><div>Reconciles candidate counts, workflow cost, and closed-campaign outcomes.</div><div>Coverage and outcome metrics remain tied to their scope and period.</div></div>
+
+    <div class="footer"><span>Yi Shao · Requirements, workflows &amp; UAT</span><span>2 / 5</span></div>
+  </section>
+
+  <section class="page" id="page-3">
+    <div class="eyebrow">Requirements management · business rule to acceptance</div>
+    <h2>Requirements and acceptance criteria</h2>
+
+    <h3>RAG knowledge system</h3>
+    <table class="micro">
+      <thead><tr><th>ID</th><th>Requirement</th><th>Acceptance criterion</th><th>Owner</th><th>Verification</th></tr></thead>
+      <tbody>
+        <tr><td class="id">RAG-01</td><td><b>Approved knowledge sources</b></td><td>Every indexed source has an owner, business purpose, access rule, and update path.</td><td>Data / knowledge owner</td><td><span class="status">Operating control</span></td></tr>
+        <tr><td class="id">RAG-02</td><td><b>Hybrid retrieval</b></td><td>Paraphrased and exact-term questions draw from fused vector and keyword candidates.</td><td>Solution owner</td><td><span class="status good">Implemented</span> · <a href="https://github.com/YiShao-AI/contract-review-rag/blob/main/app/rag.py">source</a></td></tr>
+        <tr><td class="id">RAG-03</td><td><b>Source-linked answer</b></td><td>Each answer citation resolves to the retrieved document and supporting passage.</td><td>User / knowledge owner</td><td><span class="status good">8 / 8 checks</span> · <a href="https://github.com/YiShao-AI/contract-review-rag/blob/main/tests/test_citations.py">test</a></td></tr>
+        <tr><td class="id">RAG-04</td><td><b>Clarify or escalate</b></td><td>When evidence is weak, conflicting, or out of scope, the workflow requests context or routes human review.</td><td>Business owner / agent</td><td><span class="status">Expand in UAT</span></td></tr>
+        <tr><td class="id">RAG-05</td><td><b>Document ingestion</b></td><td>PDF, DOCX, TXT, scans, and filled-form overlays retain usable text and source metadata.</td><td>Solution owner</td><td><span class="status good">Implemented</span> · <a href="https://github.com/YiShao-AI/contract-review-rag/blob/main/app/ingest.py">source</a></td></tr>
+        <tr><td class="id">RAG-06</td><td><b>Protected processing</b></td><td>Deployment mode follows the approved data boundary; supported banking patterns are masked before external-capable processing.</td><td>Security / solution owner</td><td><span class="status good">Tested</span> · <a href="https://github.com/YiShao-AI/contract-review-rag/blob/main/tests/test_ingest_privacy.py">test</a></td></tr>
+        <tr><td class="id">RAG-07</td><td><b>Feedback and maintenance</b></td><td>Corrections and escalations are categorized, assigned, and added to the regression set after resolution.</td><td>Support manager</td><td><span class="status">Next iteration</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:.14in">ATM prospecting workflow</h3>
+    <table class="micro">
+      <thead><tr><th>ID</th><th>Requirement</th><th>Acceptance criterion</th><th>Owner</th><th>Verification</th></tr></thead>
+      <tbody>
+        <tr><td class="id">ATM-01</td><td><b>User-controlled spend</b></td><td>Paid requests begin only after an explicit action; projected usage is visible first and enforced limits stop additional calls.</td><td>Business owner / operator</td><td><span class="status good">Implemented + tested</span></td></tr>
+        <tr><td class="id">ATM-02</td><td><b>Adaptive coverage</b></td><td>Dense areas are subdivided only when needed; exact repeats use cached child coverage without new upstream calls.</td><td>Solution owner</td><td><span class="status good">Tested</span> · <a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/tests/test_search.py">search tests</a></td></tr>
+        <tr><td class="id">ATM-03</td><td><b>Preserve uncertainty</b></td><td>Missing provider evidence remains unknown and is routed to review rather than treated as a negative fact.</td><td>BD / data owner</td><td><span class="status good">Implemented + tested</span></td></tr>
+        <tr><td class="id">ATM-04</td><td><b>Unique candidate record</b></td><td>Results merge only under conservative same-location rules; adjacent businesses stay distinct.</td><td>BD / solution owner</td><td><span class="status good">Tested</span> · <a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/tests/test_search.py">dedupe tests</a></td></tr>
+        <tr><td class="id">ATM-05</td><td><b>Governed pipeline state</b></td><td>Status, reason, owner, stage, history, revisit date, and campaign remain attached to the candidate; bulk updates preserve later progress.</td><td>BD process owner</td><td><span class="status good">Tested</span> · <a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/tests/test_store.py">workflow tests</a></td></tr>
+        <tr><td class="id">ATM-06</td><td><b>Operational handoff</b></td><td>Exports carry qualification and current pipeline state, not just raw provider listings.</td><td>BD / operations</td><td><span class="status good">Implemented</span></td></tr>
+        <tr><td class="id">ATM-07</td><td><b>Outcome measurement</b></td><td>Closed campaigns record mailed volume, responses, signed and productive sites, source/market, and total acquisition cost.</td><td>Business owner / analyst</td><td><span class="status">Outcome plan ready</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout" style="margin-top:.13in"><b>Traceability principle:</b> requirements describe observable business behavior. Code and automated tests support technical acceptance; representative users own business UAT and release acceptance.</div>
+    <div class="footer"><span>Yi Shao · Requirements, workflows &amp; UAT</span><span>3 / 5</span></div>
+  </section>
+
+  <section class="page" id="page-4">
+    <div class="eyebrow">Data readiness · ownership, quality, lineage, governance</div>
+    <h2>Data and operating controls</h2>
+
+    <table class="dense">
+      <thead><tr><th>Source</th><th>Business use</th><th>Owner</th><th>Quality rule</th><th>Operating control</th></tr></thead>
+      <tbody>
+        <tr><td>Support email threads</td><td>Prior questions, resolutions, exceptions, dates, and categories.</td><td>Support / data owner</td><td>Remove duplicates and boilerplate; retain the original reference and policy context.</td><td>Approved role access, lifecycle mapping, source version, correction path.</td></tr>
+        <tr><td>Recorded support calls</td><td>Resolutions that may never have been written into a ticket.</td><td>Support / data owner</td><td>Transcribe, check low-confidence audio, and distill the core question and resolution.</td><td>Authorized local storage, role-based access, and retention ownership.</td></tr>
+        <tr><td>Enriched knowledge records</td><td>Searchable question, resolution, state, category, date, and source link.</td><td>Knowledge owner</td><td>Keep generated metadata subordinate to the source; sample by category and review corrections.</td><td>Live ingestion, stale-source review, failure backlog, and re-index procedure.</td></tr>
+        <tr><td>Contract documents</td><td>Clause retrieval, supporting passage, and derived deadline calculations.</td><td>Contract / data owner</td><td>OCR scans and overlays; keep stated facts distinct from derived values.</td><td>Local-first default, source citations, masked supported banking patterns.</td></tr>
+        <tr><td>Google Places results</td><td>Candidate identity, address, category, hours, contact, and search coverage.</td><td>Provider + business data owner</td><td>Normalize fields, preserve missingness, dedupe conservatively, and timestamp searches.</td><td>Restricted geometry, caching, spend limits, provider/source review.</td></tr>
+        <tr><td>Site and pipeline records</td><td>Existing coverage, candidate qualification, ownership, history, campaigns, and revisit dates.</td><td>BD process owner</td><td>One governed record per candidate; prevent stale or backward bulk changes.</td><td>Audit history, reason codes, monotonic stages, controlled export.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Accountability model</div>
+    <table class="dense">
+      <thead><tr><th>Role</th><th>Owns</th><th>Approves</th><th>Receives / reviews</th></tr></thead>
+      <tbody>
+        <tr><td>Business process owner</td><td>Scope, users, decision rights, KPI, funding, rollout and rollback.</td><td>Release and operating policy.</td><td>Adoption, outcome, and exception review.</td></tr>
+        <tr><td>Data / knowledge owner</td><td>Source authority, conflict resolution, quality, lifecycle, and correction.</td><td>Corpus and field use.</td><td>Stale-source and quality reports.</td></tr>
+        <tr><td>Representative user</td><td>Scenario feedback, exception discovery, and UAT execution.</td><td>Workflow usability and critical-path acceptance.</td><td>Release notes and support path.</td></tr>
+        <tr><td>Security / IT</td><td>Access, device/channel configuration, processor boundary, logs, incidents, recovery.</td><td>Deployment control set.</td><td>Access reviews, incidents, and control changes.</td></tr>
+        <tr><td>Solution owner / analyst</td><td>Requirements traceability, implementation, tests, monitoring, defects, and change control.</td><td>Technical release candidate.</td><td>UAT defects, production signals, and owner decisions.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Deployment control checklist</div>
+    <div class="checklist">
+      <div class="check"><b>Access:</b> named roles, least privilege, periodic membership review, credential rotation, and device expectations.</div>
+      <div class="check"><b>Content:</b> approved source classes, local-first processing, minimized message output, and a defined escalation path.</div>
+      <div class="check"><b>Lifecycle:</b> raw, derived, index, log, cache, and backup records follow named retention and deletion owners.</div>
+      <div class="check"><b>Operations:</b> monitoring, cost/error thresholds, backup/recovery, incident response, change record, and rollback path.</div>
+    </div>
+
+    <div class="note" style="margin-top:.14in"><b>Messaging channel:</b> Telegram was the company-standard communication platform, so the support assistant met agents inside their existing workflow. Channel access, retention, minimized output, and incident handling belong in the same operating controls as the rest of the system.</div>
+    <div class="footer"><span>Yi Shao · Requirements, workflows &amp; UAT</span><span>4 / 5</span></div>
+  </section>
+
+  <section class="page" id="page-5">
+    <div class="eyebrow">Validation · UAT scenarios, readiness, and decisions</div>
+    <h2>UAT and release readiness</h2>
+
+    <div class="metric-grid">
+      <div class="metric"><strong>5 / 5</strong><span>Held-back support questions passed after ten tuning questions.</span></div>
+      <div class="metric"><strong>22 / 22</strong><span>Expected contracts retrieved; 20 / 22 expected passages and 8 / 8 citation checks.</span></div>
+      <div class="metric"><strong>57 tests</strong><span>Search, cache, spend, qualification, history, revisit, and pipeline controls.</span></div>
+    </div>
+
+    <h3 style="margin-top:.16in">Representative UAT scenarios</h3>
+    <table class="dense">
+      <thead><tr><th>Scenario</th><th>Expected business result</th><th>Current signal</th><th>Release use</th></tr></thead>
+      <tbody>
+        <tr><td>Support question uses different wording from the source.</td><td>Retrieve the applicable prior resolution and show the supporting passage.</td><td><span class="status good">Pilot passed</span></td><td>Expand across common ticket categories and agent seniority.</td></tr>
+        <tr><td>Question depends on an exact code, state, amount, or clause.</td><td>Hybrid search keeps the exact business term in the retrieved evidence.</td><td><span class="status good">Validated</span></td><td>Include high-risk and jurisdiction-sensitive cases in owner UAT.</td></tr>
+        <tr><td>No source adequately supports an answer.</td><td>Ask for clarification or route a human escalation with the available context.</td><td><span class="status">UAT focus</span></td><td>Lock the owner-approved abstention and escalation policy.</td></tr>
+        <tr><td>A map search covers a dense market.</td><td>Increase coverage adaptively while staying inside forecast and enforced call limits.</td><td><span class="status good">Validated</span></td><td>Run representative market, density, and budget scenarios.</td></tr>
+        <tr><td>Provider metadata is incomplete or candidates overlap.</td><td>Preserve unknown fields for review and avoid merging adjacent businesses.</td><td><span class="status good">Validated</span></td><td>Sample exception decisions with a BD owner.</td></tr>
+        <tr><td>An import carries older pipeline state.</td><td>Keep current progress, record the attempted change, and preserve ownership/history.</td><td><span class="status good">Validated</span></td><td>Complete one end-to-end campaign handoff and export.</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:.14in">Decision log</h3>
+    <table class="micro">
+      <thead><tr><th>Decision</th><th>Why</th><th>Tradeoff managed</th><th>Revisit trigger</th></tr></thead>
+      <tbody>
+        <tr><td>Hybrid retrieval</td><td>Questions contain both paraphrase and exact business terms.</td><td>More components, fewer single-retriever blind spots.</td><td>Error analysis shows one path adds no value.</td></tr>
+        <tr><td>Source-first answer design</td><td>Users need to act on the answer, not merely read fluent text.</td><td>One verification step in exchange for traceability and correction.</td><td>User behavior or policy changes the required verification level.</td></tr>
+        <tr><td>Existing work channel</td><td>Reach distributed agents without a new tool or training burden.</td><td>Channel configuration joins the deployment control set.</td><td>Company platform or security policy changes.</td></tr>
+        <tr><td>Paid Places provider</td><td>The operating workflow needs business-listing coverage and fields suitable for qualification.</td><td>Provider dependency managed through forecast, cache, limits, and stop control.</td><td>Coverage, cost, terms, or field availability changes.</td></tr>
+        <tr><td>Tri-state qualification</td><td>Missing listing data cannot prove a feature is absent.</td><td>More human review, fewer false exclusions.</td><td>An authoritative field source closes the missingness gap.</td></tr>
+        <tr><td>Campaign outcome tracking</td><td>Search activity matters only when it connects to business-development results.</td><td>Additional operating discipline creates usable acquisition economics.</td><td>KPI or sales motion changes.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Release checkpoints</div>
+    <div class="checklist">
+      <div class="check">Business owner confirms scope, target users, decision rights, KPI, rollout, and rollback.</div>
+      <div class="check">Representative users complete critical scenarios; defects have an owner and disposition.</div>
+      <div class="check">Data and security owners confirm sources, access, lifecycle, channel, and incident controls.</div>
+      <div class="check">Solution owner confirms monitoring, cost/error thresholds, backup, recovery, and support path.</div>
+    </div>
+
+    <div class="callout" style="margin-top:.13in"><b>Measurement after release:</b> track verified lookup time, escalation and adoption for the knowledge workflow; track unique candidates, qualification completion, mailed volume, responses, signed and productive sites, cycle time, and total acquisition cost for prospecting.</div>
+    <div class="footer"><span>Yi Shao · Requirements, workflows &amp; UAT</span><span>5 / 5</span></div>
+  </section>
+
+  <script>
+    (()=>{const root=document.documentElement,button=document.getElementById('theme-toggle'),label=document.getElementById('theme-label');function render(){const dark=root.dataset.theme==='dark';label.textContent=dark?'Light':'Dark';button.setAttribute('aria-pressed',String(dark))}button.addEventListener('click',()=>{const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;try{localStorage.setItem('yi-shao-theme',next)}catch{}render()});render()})();
+  </script>
+</body>
+</html>

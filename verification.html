@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Implementation, architecture, and test links for Yi Shao's RAG knowledge system and ATM prospecting workflow.">
+  <link rel="canonical" href="https://yishao-ai.github.io/work-sample-evidence/verification.html">
+  <title>Yi Shao — Implementation &amp; Tests</title>
+  <script>
+    (() => {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      try {
+        const saved = localStorage.getItem('yi-shao-theme');
+        document.documentElement.dataset.theme = saved === 'dark' || saved === 'light' ? saved : systemTheme;
+      } catch { document.documentElement.dataset.theme = systemTheme; }
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas:#e2e7eb;--paper:#fbfaf7;--surface:#fff;--ink:#172334;--muted:#596778;
+      --navy:#12345a;--teal:#087b78;--teal-soft:#e3f3f1;--blue-soft:#eaf1f8;
+      --line:#d7dfe6;--gold:#d69a2d;--shadow:0 18px 46px rgba(18,52,90,.12);
+      --head:#12345a;--head-ink:#fff;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --canvas:#080e15;--paper:#101a24;--surface:#15212d;--ink:#e7edf5;--muted:#aab6c4;
+      --navy:#edf4fc;--teal:#55c9c2;--teal-soft:#173331;--blue-soft:#1c2b3a;
+      --line:#2b3a4a;--gold:#e0aa4a;--shadow:0 18px 46px rgba(0,0,0,.34);
+      --head:#213c59;--head-ink:#f2f7fc;
+    }
+    *{box-sizing:border-box}html{background:var(--canvas);scroll-behavior:smooth}body{max-width:1120px;margin:0 auto;padding:30px 26px 56px;color:var(--ink);background:var(--paper);font:16px/1.55 Aptos,"Segoe UI",Arial,sans-serif;box-shadow:var(--shadow)}
+    a{color:var(--teal);text-underline-offset:3px}h1,h2,h3,p{margin-top:0}h1,h2,h3{color:var(--navy);line-height:1.12}h1{max-width:800px;margin:10px 0 14px;font-size:clamp(2.35rem,5vw,4rem);letter-spacing:-.045em}h2{margin:46px 0 17px;font-size:1.7rem;letter-spacing:-.02em}h3{margin:0 0 8px;font-size:1.08rem}p{margin-bottom:12px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:18px;border-bottom:1px solid var(--line)}.back{font-weight:750;text-decoration:none}.theme-toggle{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink);background:var(--surface);font:inherit;font-size:.84rem;font-weight:750;cursor:pointer}
+    .eyebrow{color:var(--teal);font-size:.78rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase}.hero{padding:64px 0 26px}.dek{max-width:850px;color:var(--muted);font-size:1.16rem}.actions,.tags{display:flex;flex-wrap:wrap;gap:9px}.actions{margin-top:22px}.button{display:inline-flex;align-items:center;justify-content:center;padding:10px 15px;border:1px solid var(--navy);border-radius:8px;color:var(--navy);background:transparent;font-weight:800;text-decoration:none}.button.primary{color:#fff;background:#12345a;border-color:#12345a}:root[data-theme="dark"] .button.primary{color:#071018;background:var(--teal);border-color:var(--teal)}
+    .summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:24px 0 10px}.summary-card,.card{padding:20px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.summary-card{border-top:4px solid var(--teal)}.summary-card:nth-child(2){border-top-color:var(--gold)}.summary-card .big{margin:4px 0 7px;color:var(--navy);font-size:1.35rem;font-weight:850}.tag{display:inline-block;padding:4px 10px;border-radius:999px;color:var(--navy);background:var(--blue-soft);font-size:.78rem;font-weight:800}
+    .project{padding-top:4px}.project-head{max-width:900px}
+    table{width:100%;margin-top:18px;border-collapse:collapse;font-size:.92rem}th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{color:var(--head-ink);background:var(--head);font-size:.76rem;letter-spacing:.05em;text-transform:uppercase}td:first-child{color:var(--navy);font-weight:800}code{padding:2px 5px;border-radius:4px;color:var(--navy);background:var(--blue-soft);font:.86em Consolas,"Courier New",monospace}
+    .materials{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card p:last-child{margin-bottom:0}.quiet{color:var(--muted);font-size:.9rem}.confidentiality{margin-top:40px;padding:17px 19px;border-left:5px solid var(--gold);background:var(--teal-soft)}footer{margin-top:42px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.86rem}
+    @media(max-width:760px){body{padding:22px 16px 42px}.summary-grid,.materials{grid-template-columns:1fr}.hero{padding-top:48px}table{display:block;overflow-x:auto}}
+    @media print{html{background:#fff}body{max-width:none;padding:.45in;box-shadow:none}.theme-toggle{display:none}a{color:var(--ink)}.project{break-inside:avoid}.hero{padding-top:.25in}}
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"Yi Shao — Implementation and Tests","url":"https://yishao-ai.github.io/work-sample-evidence/verification.html","dateModified":"2026-09-01","author":{"@type":"Person","name":"Yi Shao"},"hasPart":[{"@type":"SoftwareSourceCode","name":"Contract-Review RAG","codeRepository":"https://github.com/YiShao-AI/contract-review-rag"},{"@type":"SoftwareSourceCode","name":"ATM Map","codeRepository":"https://github.com/YiShao-AI/ATM-Map-Public"}]}
+  </script>
+</head>
+<body>
+  <nav class="topbar" aria-label="Page navigation">
+    <a class="back" href="index.html">← Work-sample portfolio</a>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch color theme"><span aria-hidden="true">◐</span><span id="theme-label">Theme</span></button>
+  </nav>
+
+  <header class="hero">
+    <div class="eyebrow">Source code · architecture · tests</div>
+    <h1>Implementation &amp; tests</h1>
+    <p class="dek">Direct links from each portfolio capability to the implementation and tests behind it. Start with the case summary; use this page when you want to inspect how the systems work.</p>
+    <div class="actions">
+      <a class="button primary" href="Yi-Shao-Work-Sample.html">Read the work sample</a>
+      <a class="button" href="Yi-Shao-BA-Verification-Appendix.html">Requirements, workflows &amp; UAT</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="summary-grid" aria-label="Project summary">
+      <article class="summary-card">
+        <div class="eyebrow">01 · RAG knowledge system</div>
+        <div class="big">Grounded answers from institutional knowledge</div>
+        <p>Hybrid retrieval over document and support content, with vector embeddings, exact-term search, source citations, OCR, and a live ingestion pattern.</p>
+        <div class="tags"><span class="tag">RAG</span><span class="tag">Vector embeddings</span><span class="tag">Hybrid search</span><span class="tag">Source citations</span></div>
+      </article>
+      <article class="summary-card">
+        <div class="eyebrow">02 · Prospecting operations</div>
+        <div class="big">Thousands of mapped candidates with a governed funnel</div>
+        <p>Google Places integration, adaptive geospatial search, caching, qualification, deduplication, pipeline history, and API spend controls.</p>
+        <div class="tags"><span class="tag">Places API</span><span class="tag">Geospatial search</span><span class="tag">Caching</span><span class="tag">Pipeline state</span></div>
+      </article>
+    </div>
+
+    <section class="project" aria-labelledby="rag-heading">
+      <div class="project-head">
+        <div>
+          <div class="eyebrow">Project 1 · RAG knowledge system</div>
+          <h2 id="rag-heading">Retrieve the answer and the source behind it</h2>
+          <p>The professional workflow made repeated support resolutions searchable inside the team’s established messaging channel. The linked contract-review implementation demonstrates the same technical pattern with a browser-based source panel and clause-level citations.</p>
+          <div class="actions">
+            <a class="button primary" href="https://yishao-ai.github.io/contract-review-rag/demo/">Open walkthrough</a>
+            <a class="button" href="https://github.com/YiShao-AI/contract-review-rag">View repository</a>
+          </div>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Capability</th><th>Implementation</th><th>Test or demonstration</th></tr></thead>
+        <tbody>
+          <tr><td>Hybrid retrieval</td><td>Dense-vector and keyword candidates are fused before answer generation.</td><td><a href="https://github.com/YiShao-AI/contract-review-rag/blob/main/app/rag.py"><code>app/rag.py</code></a> · <a href="https://yishao-ai.github.io/contract-review-rag/workbook.html">retrieval workbook</a></td></tr>
+          <tr><td>Document ingestion</td><td>PDF, DOCX, and TXT ingestion; OCR recovers scanned and filled-form content; source metadata remains attached.</td><td><a href="https://github.com/YiShao-AI/contract-review-rag/blob/main/app/ingest.py"><code>app/ingest.py</code></a> · <a href="https://github.com/YiShao-AI/contract-review-rag/blob/main/tests/test_ingest_privacy.py">ingestion control test</a></td></tr>
+          <tr><td>Traceable answers</td><td>Displayed citations resolve to the retrieved source chunks and original document context.</td><td><a href="https://github.com/YiShao-AI/contract-review-rag/blob/main/tests/test_citations.py"><code>tests/test_citations.py</code></a> · <a href="https://yishao-ai.github.io/contract-review-rag/demo/">source-panel walkthrough</a></td></tr>
+          <tr><td>Deployment flexibility</td><td>Local Ollama inference or a configurable hosted model endpoint is selected through configuration.</td><td><a href="https://github.com/YiShao-AI/contract-review-rag#run-locally">setup and runtime configuration</a></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="project" aria-labelledby="atm-heading">
+      <div class="project-head">
+        <div>
+          <div class="eyebrow">Project 2 · Prospecting operations</div>
+          <h2 id="atm-heading">Turn manual map research into a scalable prospecting process</h2>
+          <p>The application turns one-at-a-time map research into a repeatable prospecting process. Existing sites, pipeline records, and new candidates share one operating view; each search is scoped, metered, cached, and connected to a qualification decision.</p>
+          <div class="actions">
+            <a class="button primary" href="https://atm-map.taila60f3a.ts.net/">Open live demo</a>
+            <a class="button" href="https://github.com/YiShao-AI/ATM-Map-Public">View repository</a>
+          </div>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Capability</th><th>Implementation</th><th>Test or demonstration</th></tr></thead>
+        <tbody>
+          <tr><td>Adaptive map search</td><td>Search geometry is divided only where result density requires it, increasing coverage while limiting calls.</td><td><a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/proxy.py"><code>proxy.py</code></a> · <a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/tests/test_search.py">search tests</a></td></tr>
+          <tr><td>API spend controls</td><td>Opt-in searches, pre-run estimates, caching, daily/lifetime limits, burst control, and a kill switch make cost visible before and during a run.</td><td><a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/tests/test_search.py">budget and cache tests</a> · <a href="Yi-Shao-ATM-Prospecting-Cost-Model.xlsx">cost model</a></td></tr>
+          <tr><td>Candidate qualification</td><td>Known, likely, and unknown states preserve missing provider data for review instead of turning it into a false exclusion.</td><td><a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/pipeline.js"><code>pipeline.js</code></a> · <a href="https://atm-map.taila60f3a.ts.net/">live workflow</a></td></tr>
+          <tr><td>Governed pipeline</td><td>Decisions, reasons, stages, history, campaign membership, and revisit dates stay attached to each candidate.</td><td><a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/store.py"><code>store.py</code></a> · <a href="https://github.com/YiShao-AI/ATM-Map-Public/blob/main/tests/test_store.py">workflow-state tests</a></td></tr>
+        </tbody>
+      </table>
+      <p class="quiet">The live demo uses metered APIs. Login credentials are provided with the application; please keep searches focused.</p>
+    </section>
+
+    <section aria-labelledby="materials-heading">
+      <div class="eyebrow">Supporting work products</div>
+      <h2 id="materials-heading">Follow the analysis behind the implementation</h2>
+      <div class="materials">
+        <article class="card"><h3>Primary work sample</h3><p>Context, contribution, decisions, implementation, results, and next steps.</p><p><a href="Yi-Shao-Work-Sample.html">Read in browser</a> · <a href="Yi-Shao-Work-Sample.pdf">PDF</a></p></article>
+        <article class="card"><h3>Requirements, workflows &amp; UAT</h3><p>Stakeholder decisions, future-state workflows, acceptance criteria, data ownership, and launch readiness.</p><p><a href="Yi-Shao-BA-Verification-Appendix.html">Read in browser</a> · <a href="Yi-Shao-BA-Verification-Appendix.pdf">PDF</a></p></article>
+        <article class="card"><h3>ATM cost model</h3><p>Planning assumptions, labor and API costs, sensitivity, reconciliation, and campaign outcome tracking.</p><p><a href="Yi-Shao-ATM-Prospecting-Cost-Model.xlsx">Download workbook</a></p></article>
+      </div>
+    </section>
+
+    <div class="confidentiality"><strong>Confidentiality:</strong> Public examples use reconstructed or non-confidential records. Employer source code, confidential records, credentials, and proprietary scoring logic are excluded.</div>
+  </main>
+
+  <footer>Prepared by Yi Shao · AI Business Analyst work samples · September 2026</footer>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const button = document.getElementById('theme-toggle');
+      const label = document.getElementById('theme-label');
+      function render(){ const dark=root.dataset.theme==='dark'; label.textContent=dark?'Light':'Dark'; button.setAttribute('aria-pressed',String(dark)); }
+      button.addEventListener('click',()=>{ const next=root.dataset.theme==='dark'?'light':'dark'; root.dataset.theme=next; try{localStorage.setItem('yi-shao-theme',next)}catch{} render(); });
+      render();
+    })();
+  </script>
+</body>
+</html>
